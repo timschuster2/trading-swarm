@@ -1,0 +1,36 @@
+# Environment
+.env
+.env.*
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+ENV/
+build/
+dist/
+
+# Swarm internals
+CLAUDE.md
+CLAUDE.local.md
+.swarm/
+working files for next session/
+archive/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Secrets
+credentials.json
+secrets/
