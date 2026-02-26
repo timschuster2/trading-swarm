@@ -79,12 +79,14 @@ _solana_retry = tenacity.retry(
 )
 
 @_solana_retry
-async def fetch_from_helius(asset: str, client: httpx.AsyncClient) -> dict:
-    inject_failure()
-    url = f"https://api.helius.xyz/v0/token-metadata?api-key={HELIUS_API_KEY}"
+async def fetch_price_from_jupiter(asset: str, client: httpx.AsyncClient) -> dict:
+    """Get SOL price in USDC from Jupiter price API."""
+    url = "https://price.jup.ag/v6/price?ids=SOL&vsToken=USDC"
     resp = await client.get(url, timeout=5.0)
     resp.raise_for_status()
-    return {"raw": resp.json(), "provider": "helius"}
+    data = resp.json()
+    price = data["data"]["SOL"]["price"]
+    return {"price_close": price, "provider": "jupiter"}
 
 async def get_slippage_quote(size_usdc: float, client: httpx.AsyncClient) -> float:
     amount_micro = int(size_usdc * 1_000_000)
@@ -112,7 +114,7 @@ async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
     async with httpx.AsyncClient() as client:
         try:
             if provider == "helius":
-                raw = await fetch_from_helius(asset_pair, client)
+                raw = await fetch_price_from_jupiter(asset_pair, client)
             else:
                 logger.warning(f"Provider {provider} not yet implemented.")
                 _record_call(failed=True)
@@ -122,7 +124,7 @@ async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
 
             snapshot = {
                 "asset_pair": asset_pair,
-                "price_close": 0,
+                "price_close": raw.get("price_close", 0),
                 "data_sources": {"provider": provider},
                 "latency_p99_ms": measure_rtt(PROVIDER_HOSTS[provider]),
                 "projected_slippage_pct": slippage,
