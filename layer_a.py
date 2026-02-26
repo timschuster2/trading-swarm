@@ -79,30 +79,35 @@ _solana_retry = tenacity.retry(
 )
 
 @_solana_retry
-async def fetch_price_from_jupiter(asset: str, client: httpx.AsyncClient) -> dict:
-    """Get SOL price in USDC from Jupiter price API."""
-    url = "https://price.jup.ag/v6/price?ids=SOL&vsToken=USDC"
+async def fetch_price_from_coingecko(asset: str, client: httpx.AsyncClient) -> dict:
+    """Get SOL price in USD from CoinGecko public API."""
+    url = "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
     resp = await client.get(url, timeout=5.0)
     resp.raise_for_status()
     data = resp.json()
-    price = data["data"]["SOL"]["price"]
-    return {"price_close": price, "provider": "jupiter"}
+    price = data["solana"]["usd"]
+    return {"price_close": price, "provider": "coingecko"}
 
 async def get_slippage_quote(size_usdc: float, client: httpx.AsyncClient) -> float:
-    amount_micro = int(size_usdc * 1_000_000)
-    url = (
-        f"https://quote-api.jup.ag/v6/quote"
-        f"?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-        f"&outputMint=So11111111111111111111111111111111111111112"
-        f"&amount={amount_micro}"
-    )
-    resp = await client.get(url, timeout=5.0)
-    resp.raise_for_status()
-    data = resp.json()
-    in_amt = int(data.get("inAmount", 1))
-    out_amt = int(data.get("outAmount", 1))
-    slippage_pct = abs(1 - (out_amt / in_amt)) * 100
-    return round(slippage_pct, 4)
+    """Estimate slippage via Jupiter quote API. Falls back to conservative estimate."""
+    try:
+        amount_micro = int(size_usdc * 1_000_000)
+        url = (
+            f"https://quote-api.jup.ag/v6/quote"
+            f"?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+            f"&outputMint=So11111111111111111111111111111111111111112"
+            f"&amount={amount_micro}"
+        )
+        resp = await client.get(url, timeout=5.0)
+        resp.raise_for_status()
+        data = resp.json()
+        in_amt = int(data.get("inAmount", 1))
+        out_amt = int(data.get("outAmount", 1))
+        slippage_pct = abs(1 - (out_amt / in_amt)) * 100
+        return round(slippage_pct, 4)
+    except Exception as exc:
+        logger.warning(f"Slippage quote unavailable, using conservative estimate: {exc}")
+        return 0.5
 
 async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
     provider = best_provider()
@@ -114,7 +119,7 @@ async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
     async with httpx.AsyncClient() as client:
         try:
             if provider == "helius":
-                raw = await fetch_price_from_jupiter(asset_pair, client)
+                raw = await fetch_price_from_coingecko(asset_pair, client)
             else:
                 logger.warning(f"Provider {provider} not yet implemented.")
                 _record_call(failed=True)
