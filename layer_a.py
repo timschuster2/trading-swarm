@@ -24,6 +24,8 @@ PROVIDERS = ["helius", "quicknode", "ankr"]
 RTT_THRESHOLD_MS = 100
 FAILURE_RATE_HALT = 0.20
 SLIPPAGE_KILL_PCT = 2.0
+# 🔴 SPECULATIVE — window size unvalidated, needs 100+ forward tests
+VOLATILITY_WINDOW = 20
 
 db = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -115,6 +117,7 @@ def calculate_volatility_z_score(asset_pair: str) -> Optional[float]:
     Rolling 20-period z-score of SOL price volatility.
     Fetches last 21 snapshots to get 20 returns, computes z-score of latest return.
     Returns None if insufficient data (<3 snapshots).
+    🔴 SPECULATIVE — window size unvalidated, needs 100+ forward tests.
     """
     result = (
         db.table("market_snapshots")
@@ -160,6 +163,7 @@ async def fetch_liquidity_depth_1pct(client: httpx.AsyncClient) -> Optional[floa
     Estimate USD depth at 1% price impact for SOL/USDC via Jupiter quote API.
     Queries with $10k USDC and linearly extrapolates to 1% impact threshold.
     Returns estimated USDC amount to move price 1%, or None on failure.
+    🔴 SPECULATIVE — extrapolation method unvalidated.
     """
     probe_usdc = 10_000
     amount_micro = int(probe_usdc * 1_000_000)
