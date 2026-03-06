@@ -1,4 +1,5 @@
 import asyncio
+import math
 import os
 import time
 import socket
@@ -109,6 +110,91 @@ async def get_slippage_quote(size_usdc: float, client: httpx.AsyncClient) -> flo
         logger.warning(f"Slippage quote unavailable, using conservative estimate: {exc}")
         return 0.5
 
+def calculate_volatility_z_score(asset_pair: str) -> Optional[float]:
+    """
+    Rolling 20-period z-score of SOL price volatility.
+    Fetches last 21 snapshots to get 20 returns, computes z-score of latest return.
+    Returns None if insufficient data (<3 snapshots).
+    """
+    result = (
+        db.table("market_snapshots")
+        .select("price_close")
+        .eq("asset_pair", asset_pair)
+        .order("created_at", desc=True)
+        .limit(21)
+        .execute()
+    )
+
+    prices = [row["price_close"] for row in result.data if row["price_close"]]
+    if len(prices) < 3:
+        logger.warning(f"Volatility z-score: only {len(prices)} snapshots, need ≥3")
+        return None
+
+    # Oldest first for chronological returns
+    prices.reverse()
+
+    # Log returns
+    returns = []
+    for i in range(1, len(prices)):
+        if prices[i - 1] > 0:
+            returns.append(math.log(prices[i] / prices[i - 1]))
+
+    if len(returns) < 2:
+        return None
+
+    mean_r = sum(returns) / len(returns)
+    variance = sum((r - mean_r) ** 2 for r in returns) / (len(returns) - 1)
+    std_r = math.sqrt(variance) if variance > 0 else 0
+
+    if std_r == 0:
+        return None
+
+    z_score = (returns[-1] - mean_r) / std_r
+    logger.info(f"Volatility z-score: {z_score:.4f} (from {len(returns)} returns)")
+    return round(z_score, 4)
+
+
+@_solana_retry
+async def fetch_liquidity_depth_1pct(client: httpx.AsyncClient) -> Optional[float]:
+    """
+    Estimate USD depth at 1% price impact for SOL/USDC via Jupiter quote API.
+    Queries with $10k USDC and linearly extrapolates to 1% impact threshold.
+    Returns estimated USDC amount to move price 1%, or None on failure.
+    """
+    probe_usdc = 10_000
+    amount_micro = int(probe_usdc * 1_000_000)
+    url = (
+        f"https://quote-api.jup.ag/v6/quote"
+        f"?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+        f"&outputMint=So11111111111111111111111111111111111111112"
+        f"&amount={amount_micro}"
+        f"&slippageBps=100"
+    )
+    resp = await client.get(url, timeout=8.0)
+    resp.raise_for_status()
+    data = resp.json()
+
+    price_impact_str = data.get("priceImpactPct", "0")
+    price_impact = float(price_impact_str)
+
+    if price_impact <= 0:
+        logger.info("Liquidity depth: negligible impact at $10k probe — capped at $1M")
+        return 1_000_000.0
+
+    # Jupiter priceImpactPct is a percentage value (e.g. 0.05 = 0.05%)
+    # Linear extrapolation: if $10k causes X%, then 1% needs $10k * (1/X)
+    # Guard: if priceImpactPct > 50, likely a unit error — treat as unreliable
+    if price_impact > 50:
+        logger.warning(f"Liquidity depth: priceImpactPct={price_impact} suspiciously high — skipping")
+        return None
+
+    depth_1pct = probe_usdc * (1.0 / price_impact)
+    depth_1pct = min(depth_1pct, 10_000_000.0)  # Cap at $10M
+
+    logger.info(f"Liquidity depth 1%: ${depth_1pct:,.0f} (probe impact: {price_impact:.4f}%)")
+    return round(depth_1pct, 2)
+
+
 async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
     provider = best_provider()
     if provider is None:
@@ -127,9 +213,20 @@ async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
 
             slippage = await get_slippage_quote(150.0, client)
 
+            # New Layer A signals
+            vol_z = await asyncio.to_thread(calculate_volatility_z_score, asset_pair)
+
+            try:
+                depth = await fetch_liquidity_depth_1pct(client)
+            except Exception as exc:
+                logger.warning(f"Liquidity depth fetch failed: {exc}")
+                depth = None
+
             snapshot = {
                 "asset_pair": asset_pair,
                 "price_close": raw.get("price_close", 0),
+                "volatility_z_score": vol_z,
+                "liquidity_depth_1pct": depth,
                 "data_sources": {"provider": provider},
                 "latency_p99_ms": measure_rtt(PROVIDER_HOSTS[provider]),
                 "projected_slippage_pct": slippage,
@@ -137,6 +234,10 @@ async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
 
             if slippage > SLIPPAGE_KILL_PCT:
                 logger.warning(f"SLIPPAGE GATE: {slippage:.2f}% — trade rejected.")
+                # Write snapshot to Supabase for audit trail even on rejection
+                await asyncio.to_thread(
+                    lambda: db.table("market_snapshots").insert(snapshot).execute()
+                )
                 _record_call(failed=False)
                 return None
 
