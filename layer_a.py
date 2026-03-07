@@ -86,7 +86,7 @@ async def fetch_price_from_jupiter(client: httpx.AsyncClient) -> dict:
     """Get SOL price in USD from Jupiter quote API (USDC -> SOL)."""
     amount_micro = int(100 * 1_000_000)  # $100 probe
     url = (
-        f"https://quote-api.jup.ag/v6/quote"
+        f"https://api.jup.ag/swap/v1/quote"
         f"?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
         f"&outputMint=So11111111111111111111111111111111111111112"
         f"&amount={amount_micro}"
@@ -106,7 +106,7 @@ async def get_slippage_quote(size_usdc: float, client: httpx.AsyncClient) -> flo
     try:
         amount_micro = int(size_usdc * 1_000_000)
         url = (
-            f"https://quote-api.jup.ag/v6/quote"
+            f"https://api.jup.ag/swap/v1/quote"
             f"?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
             f"&outputMint=So11111111111111111111111111111111111111112"
             f"&amount={amount_micro}"
@@ -178,7 +178,7 @@ async def fetch_liquidity_depth_1pct(client: httpx.AsyncClient) -> Optional[floa
     probe_usdc = 10_000
     amount_micro = int(probe_usdc * 1_000_000)
     url = (
-        f"https://quote-api.jup.ag/v6/quote"
+        f"https://api.jup.ag/swap/v1/quote"
         f"?inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
         f"&outputMint=So11111111111111111111111111111111111111112"
         f"&amount={amount_micro}"
