@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 HELIUS_API_KEY = os.getenv("HELIUS_API_KEY")
+JUPITER_API_KEY = os.getenv("JUPITER_API_KEY")
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
 
 PROVIDERS = ["helius", "quicknode", "ankr"]
@@ -216,7 +217,8 @@ async def deterministic_pull(asset_pair: str = "SOL/USDC") -> Optional[dict]:
         _record_call(failed=True)
         return None
 
-    async with httpx.AsyncClient() as client:
+    jup_headers = {"x-api-key": JUPITER_API_KEY} if JUPITER_API_KEY else {}
+    async with httpx.AsyncClient(headers=jup_headers) as client:
         try:
             raw = await fetch_price_from_jupiter(client)
             slippage = await get_slippage_quote(150.0, client)
