@@ -21,7 +21,7 @@ Holly routes to the right skill based on what Timothy asks for.
 |-------|------|-----------|-------|
 | **lean-canvas** | `.claude/skills/lean-canvas/SKILL.md` | Frame or stress-test a product/service idea | Holly |
 | **service-design** | `.claude/skills/service-design/SKILL.md` | Map user experience and system boundary | Holly |
-| **requirements** | `.claude/skills/requirements/SKILL.md` | High-level or detailed requirements at any fidelity | Holly |
+| **requirements** | `.claude/skills/ba-requirements/SKILL.md` | High-level or detailed requirements at any fidelity | Holly |
 | **solution-design** | `.claude/skills/solution-design/SKILL.md` | Design or document system — new, delta, or post-build | Holly |
 | **architecture** | `.claude/skills/architecture/SKILL.md` | Define or update technical design — schema, services, APIs | Elon |
 | **gap-resolution** | `.claude/skills/gap-resolution/SKILL.md` | Resolve any unresolved decision via swarm vote | Holly |
