@@ -45,12 +45,17 @@ def call_agent(system: str, user: str) -> tuple[str, int]:
     Call Claude with tight token cap. Returns (response_text, total_tokens).
     Model failover: if primary fails, log and re-raise — caller handles.
     """
-    response = claude.messages.create(
-        model=SWARM_MODEL,
-        max_tokens=MAX_TOKENS,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-    )
+    try:
+        response = claude.messages.create(
+            model=SWARM_MODEL,
+            max_tokens=MAX_TOKENS,
+            system=system,
+            messages=[{"role": "user", "content": user}],
+            timeout=60.0,
+        )
+    except Exception as e:
+        logger.error(f"Anthropic API call failed: {e}")
+        raise
     text = response.content[0].text
     tokens = response.usage.input_tokens + response.usage.output_tokens
     return text, tokens
@@ -237,8 +242,15 @@ def write_reasoning(snapshot_id: str, regime: dict, narrative: dict, skeptic: di
         "failure_injected": False,
     }
 
-    result = db.table("swarm_reasoning").insert(record).execute()
-    reasoning_id = result.data[0]["reasoning_id"]
+    try:
+        result = db.table("swarm_reasoning").insert(record).execute()
+        if not result.data:
+            logger.error("Supabase insert returned no data — record may not have been written")
+            return None
+        reasoning_id = result.data[0]["reasoning_id"]
+    except Exception as e:
+        logger.error(f"Supabase write failed: {e}")
+        return None
     logger.info(f"Swarm reasoning written | verdict: {god.get('verdict')} | tokens: {total_tokens}")
     return reasoning_id
 
