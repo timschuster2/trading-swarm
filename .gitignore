@@ -13,6 +13,7 @@ build/
 dist/
 
 # Swarm internals
+CLAUDE.md
 CLAUDE.local.md
 TRADING-SYSTEM.md
 .swarm/
