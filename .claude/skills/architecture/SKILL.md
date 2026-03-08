@@ -6,11 +6,12 @@ description: |
   component design, and dependency map. New systems, mid-build changes, or
   post-build documentation. Elon leads. Holly checks business alignment.
   Keywords: architecture, schema, service topology, api, component, database, env vars, technical spec
-version: "1.0"
+version: "1.1"
 owner: Timothy Schuster
 agent: Elon (leads) | Holly (business alignment) | Nobody (pre-build gate)
 status: active
 created: 2026-03-08
+updated: 2026-03-08
 allowed-tools: "Read Bash mcp__supabase-swarm mcp__github WebSearch"
 ---
 
@@ -33,6 +34,43 @@ escalate to Timothy. Never silently descope to make something easier to build.
 ## Mode
 
 Elon states at invocation: **New / Delta / Documentation**
+
+---
+
+## Phase 0 — Anthropic Best Practice Check (MANDATORY — cannot skip)
+
+Before proposing any technical approach, Elon verifies current Anthropic guidance.
+"I already know this" is not sufficient — guidance changes. Verify at build time.
+
+**Run for every architecture proposal, regardless of how familiar the pattern seems.**
+
+```
+ANTHROPIC CHECK — [Date] — [Pattern/approach being proposed]
+
+1. Search: web_search "Anthropic Claude Code [specific pattern] best practice [current year]"
+2. Fetch: web_fetch docs.claude.com for any directly relevant feature or capability
+3. State findings:
+   - Guidance found: [YES / NO]
+   - Source: [URL]
+   - Confirms approach: [YES / NO / PARTIAL]
+   - Key constraint or recommendation: [one sentence]
+
+OUTCOME:
+  Confirmed  → proceed to Step 1
+  Conflicts  → surface conflict to Holly before proceeding. Do not silently adjust scope.
+  Not found  → flag 🟠 INFERRED, state reasoning, proceed with explicit caveat
+```
+
+**What to check (examples — not exhaustive):**
+- Proposing a Railway cron pattern → check Anthropic's Railway + Claude Code guidance
+- Proposing a Supabase MCP query structure → check docs.claude.com MCP best practice
+- Proposing a new CLAUDE.md structure → check current memory/CLAUDE.md recommendations
+- Proposing a multi-agent sub-agent pattern → check current Claude Code agent docs
+- Proposing any new tool or MCP → check Anthropic's tool use documentation
+
+**Hard rule:** If Anthropic guidance explicitly contradicts the proposed approach,
+Elon stops and surfaces the conflict. Holly and Timothy decide. Elon never overrides
+Anthropic guidance unilaterally — even if the conflicting approach seems pragmatic.
 
 ---
 
