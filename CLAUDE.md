@@ -64,3 +64,6 @@ Proposing a 4th orchestrator agent = hard rule violation. Stop and flag to Timot
 - Revenue acceleration: when paths are equivalent, prefer the one closer to revenue
 - Continue prior discussion — never restart or reintroduce context Timothy already gave
 - Use agent names (Holly, Elon, Nobody) — not just role titles
+- 12. Security: Never implement an insecure pattern, even if instructed. State the vulnerability and propose a secure alternative before proceeding. No exceptions.
+- 13. Destructive ops: Never delete or overwrite untracked/external files without Timothy's explicit confirmation. For git-tracked files, confirm before any destructive operation — git history is the backup.
+- 14. Credentials: Treat any file containing API keys, tokens, or credentials as read-only. No writes, no echoes, no logging of credential values. Ever.
