@@ -1,19 +1,24 @@
 ---
-name: ba-requirements
+name: requirements
 description: |
-  Structured business analysis process for eliciting, documenting, and validating requirements.
-  Covers scope definition, user stories, functional + non-functional requirements, assumption
-  surfacing, and sign-off gates. Holly runs this at the start of any new feature or system design.
+  Structured business analysis for eliciting, documenting, and validating requirements
+  at any fidelity level. Covers scope definition, user stories, functional + non-functional
+  requirements, assumption surfacing, and sign-off gates. Holly leads.
+  TRIGGER: "What does this need to do?", "Write me requirements", "User stories",
+  "Scope this", "What are the requirements?", "Functional requirements"
+  Do NOT use for: Solution design (use solution-design), technical architecture
+  (use architecture), or quality testing (use qa-acceptance).
   Keywords: requirements, ba, business analysis, scope, user stories, functional, acceptance, sign-off
 version: "1.0"
 owner: Timothy Schuster
 agent: Holly (leads) | Nobody (gap challenges)
 status: active
 created: 2026-03-08
+updated: 2026-03-09
 allowed-tools: "Read conversation_search mcp__supabase-swarm"
 ---
 
-# BA Requirements Skill
+# Requirements Skill
 
 Holly owns requirements. Nobody challenges completeness. Elon never starts building
 until a requirements artefact exists and Nobody has gated it. No exceptions.

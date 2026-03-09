@@ -3,8 +3,11 @@ name: qa-acceptance
 description: |
   Quality assurance and acceptance criteria validation — callable at any build step,
   after any deployment, or on demand. Nobody runs component checks, integration traces,
-  AC validation, degraded mode tests, and go-live sign-off. Not a final-only gate.
-  Can be called mid-build after any meaningful output exists.
+  AC validation, degraded mode tests, and go-live sign-off.
+  TRIGGER: "Is this done?", "Test this", "Go-live check", "Acceptance test",
+  "Verify the deployment", "Run QA"
+  Do NOT use for: Pre-push code review (use nobody-review), architecture design
+  (use architecture), or requirements gathering (use requirements).
   Keywords: qa, testing, acceptance criteria, quality gate, integration test, sign-off, go live, verify
 version: "1.0"
 owner: Timothy Schuster

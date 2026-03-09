@@ -1,9 +1,12 @@
 ---
 name: deployment-stp
 description: |
-  Straight-through processing deployment procedures for all Timothy's live systems.
-  Covers website (Vercel), bots/services (Railway), STP handoff pattern from Projects to Claude Code,
-  commit standards, and the mandatory session close protocol.
+  Straight-through processing deployment for all Timothy's live systems. Covers
+  website (Vercel), bots/services (Railway), STP handoff from Projects to Claude Code,
+  commit standards, and mandatory session close protocol.
+  TRIGGER: "Deploy", "Push", "Ship this", "Git push", "Go live", "Release"
+  Do NOT use for: Quality review (use nobody-review), architecture design
+  (use architecture), or requirements (use requirements).
   Keywords: deploy, deployment, stp, git, push, vercel, railway, commit, pipeline, handoff
 version: "1.1"
 owner: Timothy Schuster

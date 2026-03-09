@@ -3,15 +3,18 @@ name: architecture
 description: |
   Produces or updates technical architecture at any point in delivery.
   Covers service topology, data schema, API contracts, environment variables,
-  component design, and dependency map. New systems, mid-build changes, or
-  post-build documentation. Elon leads. Holly checks business alignment.
+  component design, and dependency map. Elon leads. Holly checks business alignment.
+  TRIGGER: "How should this be built?", "Define the architecture", "Schema design",
+  "API contract", "Service topology", "Technical spec"
+  Do NOT use for: Business-level solution design (use solution-design), requirements
+  gathering (use requirements), or deployment execution (use deployment-stp).
   Keywords: architecture, schema, service topology, api, component, database, env vars, technical spec
 version: "1.1"
 owner: Timothy Schuster
 agent: Elon (leads) | Holly (business alignment) | Nobody (pre-build gate)
 status: active
 created: 2026-03-08
-updated: 2026-03-08
+updated: 2026-03-09
 allowed-tools: "Read Bash mcp__supabase-swarm mcp__github WebSearch"
 ---
 

@@ -3,7 +3,7 @@ title: "Skills Hub — MOC"
 description: "Entry point for all swarm skills. Callable on demand at any stage of delivery."
 status: active
 created: 2026-03-01
-updated: 2026-03-08
+updated: 2026-03-09
 framework_version: "v3.5"
 ---
 
@@ -19,7 +19,9 @@ Holly routes to the right skill based on what Timothy asks for.
 
 | Skill | File | Call When | Agent |
 |-------|------|-----------|-------|
-| **requirements** | `.claude/skills/ba-requirements/SKILL.md` | High-level or detailed requirements at any fidelity | Holly |
+| **lean-canvas** | `.claude/skills/lean-canvas/SKILL.md` | Frame or stress-test a product/service idea | Holly |
+| **service-design** | `.claude/skills/service-design/SKILL.md` | Map user experience and system boundary | Holly |
+| **requirements** | `.claude/skills/requirements/SKILL.md` | High-level or detailed requirements at any fidelity | Holly |
 | **solution-design** | `.claude/skills/solution-design/SKILL.md` | Design or document system — new, delta, or post-build | Holly |
 | **architecture** | `.claude/skills/architecture/SKILL.md` | Define or update technical design — schema, services, APIs | Elon |
 | **gap-resolution** | `.claude/skills/gap-resolution/SKILL.md` | Resolve any unresolved decision via swarm vote | Holly |
@@ -36,8 +38,8 @@ Holly routes to the right skill based on what Timothy asks for.
 
 | Agent | Leads | Never leads |
 |-------|-------|-------------|
-| **Holly** | requirements, solution-design, gap-resolution, alpha-intake, backlog-review | architecture, deployment-stp, trading-analysis |
-| **Elon** | architecture, deployment-stp, trading-analysis | requirements, solution-design |
+| **Holly** | lean-canvas, service-design, requirements, solution-design, gap-resolution, alpha-intake, backlog-review | architecture, deployment-stp, trading-analysis |
+| **Elon** | architecture, deployment-stp, trading-analysis | lean-canvas, service-design, requirements, solution-design |
 | **Nobody** | nobody-review, qa-acceptance | All production + design skills — gates only, never produces |
 
 ---
@@ -46,6 +48,8 @@ Holly routes to the right skill based on what Timothy asks for.
 
 | Timothy says... | Skill |
 |----------------|-------|
+| "Is this worth building / what should this be?" | lean-canvas |
+| "Map the user flow / how does a user experience this?" | service-design |
 | "What does this need to do / write me requirements / user stories" | requirements |
 | "Design this / how should it work / update the design" | solution-design |
 | "How should this be built / define the architecture / schema" | architecture |
@@ -63,15 +67,17 @@ Holly routes to the right skill based on what Timothy asks for.
 
 | Skill | Version | Updated | Status |
 |-------|---------|---------|--------|
-| requirements | 1.0 | 8 Mar 2026 | ✅ Active |
-| solution-design | 1.0 | 8 Mar 2026 | ✅ Active |
-| architecture | 1.1 | 8 Mar 2026 | ✅ Active |
-| gap-resolution | 1.0 | 8 Mar 2026 | ✅ Active |
-| alpha-intake | 1.3 | 6 Mar 2026 | ✅ Active |
-| backlog-review | 1.0 | 1 Mar 2026 | ✅ Active |
-| deployment-stp | 1.1 | 6 Mar 2026 | ✅ Active |
-| nobody-review | 1.1 | 8 Mar 2026 | ✅ Active |
-| qa-acceptance | 1.0 | 8 Mar 2026 | ✅ Active |
-| trading-analysis | 1.0 | 1 Mar 2026 | ✅ Active |
+| lean-canvas | 1.0 | 9 Mar 2026 | ⚠️ Stub |
+| service-design | 1.0 | 9 Mar 2026 | ⚠️ Stub |
+| requirements | 1.0 | 9 Mar 2026 | ✅ Active |
+| solution-design | 1.0 | 9 Mar 2026 | ✅ Active |
+| architecture | 1.1 | 9 Mar 2026 | ✅ Active |
+| gap-resolution | 1.0 | 9 Mar 2026 | ✅ Active |
+| alpha-intake | 1.3 | 9 Mar 2026 | ✅ Active |
+| backlog-review | 1.0 | 9 Mar 2026 | ✅ Active |
+| deployment-stp | 1.1 | 9 Mar 2026 | ✅ Active |
+| nobody-review | 1.1 | 9 Mar 2026 | ✅ Active |
+| qa-acceptance | 1.0 | 9 Mar 2026 | ✅ Active |
+| trading-analysis | 1.0 | 9 Mar 2026 | ✅ Active |
 
 Quarterly review: skills not triggered in 90 days → DEPRECATED (Holly flags, Timothy approves).

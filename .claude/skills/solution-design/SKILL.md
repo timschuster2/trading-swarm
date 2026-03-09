@@ -4,8 +4,12 @@ description: |
   Produces or updates a solution design at any point in delivery — early concept,
   mid-build pivot, or post-build documentation. Covers system overview, user journeys,
   data flows, integration contracts, locked decisions, and build sequence.
-  Holly owns the business layer. Elon owns the technical layer. Both must align.
-  Keywords: solution design, system overview, user journey, data flow, integration, decision, architecture, design document
+  Holly owns the business layer. Elon owns the technical layer.
+  TRIGGER: "Design this", "How should it work?", "Update the design", "System design",
+  "What did we actually build?", "Design document"
+  Do NOT use for: Technical architecture details (use architecture), requirements
+  elicitation (use requirements), or quality testing (use qa-acceptance).
+  Keywords: solution design, system overview, user journey, data flow, integration, decision, design document
 version: "1.0"
 owner: Timothy Schuster
 agent: Holly (leads — business layer) | Elon (technical feasibility input) | Nobody (design integrity gate)

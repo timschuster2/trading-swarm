@@ -4,6 +4,10 @@ description: |
   Structured intake process for evaluating external research, framework docs, upgrade proposals,
   and tool documentation against the AI Agent Swarm — Blueprint v0.3.
   Produces ADOPT / ADAPT / REJECT verdicts with exact framework text ready to merge.
+  TRIGGER: "Assess this", "Should we use X?", "Intake this", "What do you think of this?",
+  "Evaluate this tool/framework", "Review this research"
+  Do NOT use for: Internal quality review (use nobody-review), backlog prioritisation
+  (use backlog-review), or requirements gathering (use requirements).
   Keywords: intake, alpha, research, assessment, framework upgrade, review, evaluate
 version: "1.3"
 owner: Timothy Schuster

@@ -2,9 +2,12 @@
 name: backlog-review
 description: |
   Structured review of Timothy's swarm backlog — surfaces what to work on next,
-  reorders by impact, and clears stale or completed items.
-  Queries swarm_tasks (Supabase) as canonical source and produces
-  a prioritised action list with honest status on each item.
+  reorders by impact, and clears stale or completed items. Queries swarm_tasks
+  as canonical source.
+  TRIGGER: "What next?", "Review my backlog", "What should I work on?", "Prioritise",
+  "What's left?", "Weekly planning"
+  Do NOT use for: Assessing external research (use alpha-intake), requirements
+  gathering (use requirements), or deployment (use deployment-stp).
   Keywords: backlog, review, prioritise, next, todo, tasks, queue, what next
 version: "1.0"
 owner: Timothy Schuster

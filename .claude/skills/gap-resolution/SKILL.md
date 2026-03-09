@@ -2,9 +2,12 @@
 name: gap-resolution
 description: |
   Resolves design, architecture, or integration gaps using a structured 3-agent swarm vote.
-  Callable at any point in delivery — not just at design phase. Holly classifies and proposes.
-  Elon assesses technical feasibility. Nobody challenges. Produces a locked decision with
-  rationale ready to merge into the source-of-truth document.
+  Callable at any point in delivery. Holly classifies and proposes. Elon assesses
+  technical feasibility. Nobody challenges. Produces a locked decision.
+  TRIGGER: "What do we do about X?", "Resolve this", "Swarm vote", "We need to decide",
+  "This is blocking — pick one", "Lock this decision"
+  Do NOT use for: Requirements gathering (use requirements), solution design
+  (use solution-design), or quality gates (use qa-acceptance).
   Keywords: gap, decision, resolution, vote, design gap, architecture gap, lock, pending, swarm vote
 version: "1.0"
 owner: Timothy Schuster

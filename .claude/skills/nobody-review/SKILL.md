@@ -1,9 +1,13 @@
 ---
 name: nobody-review
 description: |
-  Structured quality review process for all T2+ outputs, deployments, and production code.
-  Nobody runs before every git push. Covers completeness, accuracy, actionability, blindspots,
-  adversarial twin simulation, and reality verification post-deployment.
+  Structured quality review for all T2+ outputs, deployments, and production code.
+  Nobody runs before every git push. Covers completeness, accuracy, actionability,
+  blindspots, adversarial twin simulation, and reality verification.
+  TRIGGER: "Review this", "Check this", "Before push", "Quality gate", "Is this ready?",
+  "Audit this"
+  Do NOT use for: QA acceptance testing (use qa-acceptance), architecture decisions
+  (use architecture), or deployment execution (use deployment-stp).
   Keywords: review, quality, critic, verify, deploy, check, audit, gate
 version: "1.1"
 owner: Timothy Schuster

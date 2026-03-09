@@ -1,9 +1,13 @@
 ---
 name: trading-analysis
 description: |
-  Analysis framework for the Solana multi-layer AI trading swarm (v4.0).
-  Covers Layer A/B/C architecture, sub-agent verdicts, threshold calibration,
-  market regime classification, and performance review of trade_executions.
+  Analysis framework for the Solana multi-layer AI trading swarm (v4.0). Covers
+  Layer A/B/C architecture, sub-agent verdicts, threshold calibration, market regime
+  classification, and performance review of trade_executions.
+  TRIGGER: "How is the trading bot?", "Trading review", "Market analysis",
+  "Calibrate thresholds", "Trading performance", "Layer A/B/C status"
+  Do NOT use for: Non-trading system design (use solution-design), general quality
+  review (use nobody-review), or deployment (use deployment-stp).
   Keywords: trading, solana, analysis, trade, market, regime, signal, layer, swarm, crypto
 version: "1.0"
 owner: Timothy Schuster
